@@ -1,165 +1,576 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NovaVision Lab · MLOps Portal</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TACTICAL MLOPS RECON</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f172a;
-      --card-bg: rgba(30, 41, 59, 0.7);
-      --border: rgba(255, 255, 255, 0.1);
-      --accent: #38bdf8;
-      --accent-glow: rgba(56, 189, 248, 0.25);
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
+      --bg-base: #090d0a;
+      --bg-panel: rgba(15, 23, 17, 0.85);
+      --bg-panel-hover: rgba(22, 34, 25, 0.95);
+      --border-tactical: #1b3821;
+      --border-accent: #365314;
+      --jungle-glow: #4d7c0f;
+      --neon-green: #a3e635;
+      --neon-amber: #facc15;
+      --text-muted: #839e87;
+      --text-main: #e2f0d9;
+      --font-display: 'Chakra Petch', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-mono);
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+      line-height: 1.5;
+      padding: 18px 16px 36px;
       background-image: 
-        radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 85% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 40%);
-      padding: 24px;
+        linear-gradient(to right, rgba(77, 124, 15, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(77, 124, 15, 0.08) 1px, transparent 1px),
+        radial-gradient(circle at 50% 0%, rgba(77, 124, 15, 0.22) 0%, transparent 65%),
+        radial-gradient(circle at 100% 80%, rgba(54, 83, 20, 0.18) 0%, transparent 50%);
+      background-size: 24px 24px, 24px 24px, 100% 100%, 100% 100%;
     }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 99;
+      opacity: 0.6;
+    }
+
     .container {
-      max-width: 800px;
-      width: 100%;
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 48px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+      z-index: 10;
     }
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(34, 197, 94, 0.1);
-      color: #4ade80;
-      border: 1px solid rgba(34, 197, 94, 0.25);
-      padding: 6px 16px;
-      border-radius: 99px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 24px;
+
+    .hud-frame {
+      position: relative;
+      border: 1px solid var(--border-tactical);
+      background: var(--bg-panel);
+      backdrop-filter: blur(8px);
+      padding: 20px 18px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), inset 0 0 16px rgba(77, 124, 15, 0.08);
     }
-    .status-dot {
+
+    .hud-corner-tl, .hud-corner-tr, .hud-corner-bl, .hud-corner-br {
+      position: absolute;
       width: 8px;
       height: 8px;
-      background-color: #22c55e;
-      border-radius: 50%;
-      box-shadow: 0 0 10px #22c55e;
+      border-color: var(--neon-green);
+      pointer-events: none;
     }
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    p.subtitle {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      line-height: 1.6;
-      margin-bottom: 36px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 36px;
-    }
-    .card {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
-      transition: all 0.3s ease;
-    }
-    .card:hover {
-      border-color: rgba(56, 189, 248, 0.4);
-      transform: translateY(-2px);
-    }
-    .card h3 {
-      font-size: 0.95rem;
-      color: var(--accent);
-      margin-bottom: 8px;
-    }
-    .card p {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-    .footer-note {
-      border-top: 1px solid var(--border);
-      padding-top: 24px;
+    .hud-corner-tl { top: -1px; left: -1px; border-top: 2px solid var(--neon-green); border-left: 2px solid var(--neon-green); }
+    .hud-corner-tr { top: -1px; right: -1px; border-top: 2px solid var(--neon-green); border-right: 2px solid var(--neon-green); }
+    .hud-corner-bl { bottom: -1px; left: -1px; border-bottom: 2px solid var(--neon-green); border-left: 2px solid var(--neon-green); }
+    .hud-corner-br { bottom: -1px; right: -1px; border-bottom: 2px solid var(--neon-green); border-right: 2px solid var(--neon-green); }
+
+    .top-meta {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.875rem;
+      font-size: 0.68rem;
       color: var(--text-muted);
-      flex-wrap: wrap;
-      gap: 16px;
+      letter-spacing: 0.12em;
+      border-bottom: 1px dashed rgba(77, 124, 15, 0.35);
+      padding-bottom: 8px;
+      margin-bottom: 16px;
     }
-    .btn {
+
+    .meta-tag {
+      color: var(--neon-green);
+      font-weight: 700;
+    }
+
+    .status-badge-wrapper {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(250, 204, 21, 0.07);
+      border: 1px solid rgba(250, 204, 21, 0.4);
+      padding: 6px 12px;
+      border-radius: 2px;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--neon-amber);
+      font-weight: 700;
+      text-transform: uppercase;
+      box-shadow: 0 0 12px rgba(250, 204, 21, 0.15);
+    }
+
+    .radar-pulse-container {
+      position: relative;
+      width: 10px;
+      height: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .radar-core {
+      width: 7px;
+      height: 7px;
+      background-color: var(--neon-amber);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--neon-amber);
+    }
+
+    .radar-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 1.5px solid var(--neon-amber);
+      animation: radarPing 1.8s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+
+    @keyframes radarPing {
+      0% {
+        transform: scale(0.6);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(2.8);
+        opacity: 0;
+      }
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #ffffff;
+      line-height: 1.1;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      text-shadow: 0 0 20px rgba(163, 230, 53, 0.35);
+    }
+
+    .hero-subtitle {
+      font-size: 0.78rem;
+      color: var(--neon-green);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-subtitle::before {
+      content: "▶";
+      font-size: 0.6rem;
+      color: var(--neon-green);
+    }
+
+    .mission-briefing {
+      background: rgba(27, 56, 33, 0.3);
+      border-left: 3.5px solid #365314;
+      padding: 12px 14px;
+      font-size: 0.82rem;
+      color: #d1e7dd;
+      line-height: 1.6;
+      position: relative;
+      margin-bottom: 6px;
+    }
+
+    .briefing-tag {
       display: inline-block;
-      background: linear-gradient(135deg, #0284c7, #0369a1);
-      color: white;
-      text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 12px;
-      font-weight: 600;
-      box-shadow: 0 4px 20px var(--accent-glow);
-      transition: all 0.2s ease;
+      font-size: 0.65rem;
+      color: var(--neon-green);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
     }
-    .btn:hover {
-      opacity: 0.95;
-      transform: scale(1.02);
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(77, 124, 15, 0.25);
+      padding-bottom: 6px;
+    }
+
+    .section-label span:last-child {
+      color: var(--neon-green);
+    }
+
+    .intel-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .intel-card {
+      background: rgba(13, 20, 15, 0.9);
+      border: 1px solid var(--border-tactical);
+      padding: 16px 14px;
+      position: relative;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      overflow: hidden;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+    }
+
+    .intel-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 14px;
+      height: 14px;
+      background: var(--border-tactical);
+      transition: background 0.25s ease;
+      clip-path: polygon(0 0, 100% 100%, 100% 0);
+    }
+
+    .intel-card:hover {
+      border-color: var(--neon-green);
+      background: var(--bg-panel-hover);
+      box-shadow: 0 0 18px rgba(163, 230, 53, 0.2), inset 0 0 12px rgba(163, 230, 53, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .intel-card:hover::before {
+      background: var(--neon-green);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .intel-card:hover .card-title {
+      color: var(--neon-green);
+    }
+
+    .card-badge {
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      background: rgba(77, 124, 15, 0.3);
+      color: var(--neon-green);
+      border: 1px solid rgba(163, 230, 53, 0.3);
+      letter-spacing: 0.08em;
+    }
+
+    .card-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 12px;
+    }
+
+    .intel-card:hover .card-desc {
+      color: #c9decb;
+    }
+
+    .card-telemetry {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(77, 124, 15, 0.3);
+      font-size: 0.68rem;
+    }
+
+    .tel-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tel-label {
+      color: #607963;
+      text-transform: uppercase;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+    }
+
+    .tel-val {
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    .tactical-footer {
+      border: 1px solid var(--border-tactical);
+      background: rgba(11, 18, 13, 0.9);
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+    }
+
+    .operator-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid rgba(77, 124, 15, 0.25);
+      padding-bottom: 10px;
+    }
+
+    .operator-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .op-avatar-icon {
+      width: 14px;
+      height: 14px;
+      background: var(--neon-green);
+      mask: radial-gradient(circle, transparent 35%, black 40%);
+      -webkit-mask: radial-gradient(circle, transparent 35%, black 40%);
+      display: inline-block;
+    }
+
+    .operator-label {
+      color: var(--text-muted);
+      font-size: 0.65rem;
+    }
+
+    .operator-name {
+      color: #ffffff;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .security-tier {
+      font-size: 0.62rem;
+      background: rgba(163, 230, 53, 0.12);
+      color: var(--neon-green);
+      padding: 2px 7px;
+      border: 1px solid rgba(163, 230, 53, 0.3);
+      font-weight: 700;
+    }
+
+    .cta-btn {
+      width: 100%;
+      background: linear-gradient(180deg, #1b3821 0%, #112316 100%);
+      color: var(--neon-green);
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 14px 16px;
+      border: 1.5px solid var(--neon-green);
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.25s ease;
+      box-shadow: 0 0 14px rgba(163, 230, 53, 0.2), inset 0 0 8px rgba(163, 230, 53, 0.15);
+      text-decoration: none;
+    }
+
+    .cta-btn:hover, .cta-btn:active {
+      background: var(--neon-green);
+      color: #050805;
+      box-shadow: 0 0 24px rgba(163, 230, 53, 0.55);
+      transform: scale(0.99);
+    }
+
+    .cta-btn::before, .cta-btn::after {
+      content: "";
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #090d0a;
+    }
+    .cta-btn::before { top: 0; left: 0; }
+    .cta-btn::after { bottom: 0; right: 0; }
+
+    .sys-signature {
+      text-align: center;
+      font-size: 0.6rem;
+      color: #4a634e;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
     }
   </style>
 </head>
-<body>
+<body style="background: linear-gradient(rgba(9, 13, 10, 0.78), rgba(9, 13, 10, 0.85)), url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBvJOhXiOz_McK0vyyEQD7q0T1Hmw7pFbu-23VPCTwaQMVyoiGpzS8Dc9sW29KDoAzHAFyYmr0RiE6MxVyetuywmwLmdKaMYjGqOPnu19vU0ZtBzr9yW4h3eRyw16Wkbyv5jVydFlZ7yt-WFTuAIlkdyxGBsMQyqb-qISYxK3seo5zUiwiLdls9OI0oHC3noKeTFj57epxGixfat5ukHN58lBGl9fD5bh3Z43jv2eked2VqEcjmdEijWQ&quot;) center center / cover no-repeat fixed;">
+
   <div class="container">
-    <div class="status-badge">
-      <span class="status-dot"></span>
-      GitHub Actions CI/CD Active
-    </div>
-    <h1>NovaVision MLOps Lab</h1>
-    <p class="subtitle">Platform deployment otomatis untuk eksperimen Machine Learning & Vision Language Models (VLM). Tampilan ini diperbarui secara otomatis melalui pipeline GitHub Pages.</p>
-    
-    <div class="grid">
-      <div class="card">
-        <h3>⚡ Automated CI/CD</h3>
-        <p>Setiap perubahan kode di branch main memicu build dan deploy otomatis.</p>
+    <div class="hud-frame">
+      <div class="hud-corner-tl"></div>
+      <div class="hud-corner-tr"></div>
+      <div class="hud-corner-bl"></div>
+      <div class="hud-corner-br"></div>
+
+      <div class="top-meta">
+        <div>SYS://GRID.8824</div>
+        <div>ZONE: <span class="meta-tag">JUNGLE-ALPHA</span></div>
+        <div>FREQ: 142.85 MHz</div>
       </div>
-      <div class="card">
-        <h3>🤖 ML Pipeline</h3>
-        <p>Klasifikasi teks tiket otomatis menggunakan model Scikit-Learn & TF-IDF.</p>
+
+      <div class="status-badge-wrapper">
+        <div class="status-badge">
+          <div class="radar-pulse-container">
+            <div class="radar-ring"></div>
+            <div class="radar-core"></div>
+          </div>
+          <span>[TOP SECRET] STATUS: MISSION ACTIVE</span>
+        </div>
       </div>
-      <div class="card">
-        <h3>👁️ VLM / OCR Engine</h3>
-        <p>Integrasi ekstraksi data dokumen/struk menggunakan server LM Studio lokal.</p>
+
+      <h1 class="hero-title">TACTICAL MLOPS RECON</h1>
+      <div class="hero-subtitle">Automated Model Operations in Hostile Clusters</div>
+
+      <div class="mission-briefing">
+        <div class="briefing-tag">MISSION INTEL BRIEFING // OPS-409</div>
+        <p>
+          Mengamankan dan mengorkestrasi pipeline kecerdasan mesin di zona infrastruktur minim redundansi. Memantau drift data, pelacakan bobot model, dan otomasi deployment tanpa jeda di tengah fluktuasi sinyal taktis lapangan.
+        </p>
+      </div>
+
+      <div class="section-label">
+        <span>FIELD INTEL MODULES</span>
+        <span>STATUS: SYNCHRONIZED</span>
+      </div>
+
+      <div class="intel-grid">
+        <div class="intel-card">
+          <div class="card-header">
+            <div class="card-title">01. Data Recon</div>
+            <span class="card-badge">INGESTION</span>
+          </div>
+          <p class="card-desc">
+            Penyisiran dan validasi dataset taktis secara real-time. Deteksi anomali sinyal, deduplikasi streaming data, dan sanitasi pipeline dari gangguan lingkungan ekstrem.
+          </p>
+          <div class="card-telemetry">
+            <div class="tel-item">
+              <span class="tel-label">THROUGHPUT</span>
+              <span class="tel-val">1.4 GB/s RAW</span>
+            </div>
+            <div class="tel-item">
+              <span class="tel-label">DRIFT INDEX</span>
+              <span class="tel-val">0.012 [OPTIMAL]</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="intel-card">
+          <div class="card-header">
+            <div class="card-title">02. Stealth Deploy</div>
+            <span class="card-badge">CI/CD OPS</span>
+          </div>
+          <p class="card-desc">
+            Pengiriman beban kerja model terkuantisasi ke edge node nir-jejak. Canary rollouts tanpa downtime dengan fallback otomatis jika terjadi cluster compromise.
+          </p>
+          <div class="card-telemetry">
+            <div class="tel-item">
+              <span class="tel-label">LATENCY EDGE</span>
+              <span class="tel-val">4.2 ms (INT8)</span>
+            </div>
+            <div class="tel-item">
+              <span class="tel-label">UPTIME TARGET</span>
+              <span class="tel-val">99.995% ACTIVE</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="intel-card">
+          <div class="card-header">
+            <div class="card-title">03. Vision Intel</div>
+            <span class="card-badge">SURVEILLANCE</span>
+          </div>
+          <p class="card-desc">
+            Inferensi pengenalan visual kanopi hutan dan pelacakan koordinat multi-spektral berkecepatan tinggi dengan segmentasi termal adaptif.
+          </p>
+          <div class="card-telemetry">
+            <div class="tel-item">
+              <span class="tel-label">PRECISION (mAP)</span>
+              <span class="tel-val">94.8% mAP@50</span>
+            </div>
+            <div class="tel-item">
+              <span class="tel-label">FPS STREAM</span>
+              <span class="tel-val">60 FPS 4K-UHD</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="footer-note">
-      <span>Project MLOps oleh <strong>Naufal Saifullah</strong></span>
-      <a href="https://github.com/Naufalsninja/frontend-pages" target="_blank" class="btn">Lihat Source Code</a>
-    </div>
+    <footer class="tactical-footer">
+      <div class="operator-bar">
+        <div class="operator-info">
+          <span class="op-avatar-icon"></span>
+          <div>
+            <div class="operator-label">RECON LEAD // COMMANDER</div>
+            <div class="operator-name">OPERATOR: NAUFAL SAIFULLAH</div>
+          </div>
+        </div>
+        <div class="security-tier">CLEARANCE LVL 5</div>
+      </div>
+
+      <a href="https://github.com/Naufalsninja/frontend-pages" target="_blank" class="cta-btn">
+        <span>[ AKSES SOURCE CODE ]</span>
+      </a>
+
+      <div class="sys-signature">
+        ENCRYPTED TRANSMISSION // JUNGLE RECON PROTOCOL v4.1 // ALL RIGHTS SECURED
+      </div>
+    </footer>
   </div>
 </body>
 </html>
