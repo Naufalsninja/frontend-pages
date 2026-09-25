@@ -1,35 +1,165 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NovaVision Lab</title>
-  <style>body{font-family:system-ui;margin:0;background:#eef6ff;color:#153c5d}main{max-width:720px;margin:72px auto;padding:32px;background:white;border-radius:18px}.tag{color:#1478b8;font-weight:700}</style>
+  <title>NovaVision Lab · MLOps Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --border: rgba(255, 255, 255, 0.1);
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.25);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 40%);
+      padding: 24px;
+    }
+    .container {
+      max-width: 800px;
+      width: 100%;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(34, 197, 94, 0.1);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.25);
+      padding: 6px 16px;
+      border-radius: 99px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #22c55e;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #22c55e;
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    .card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+      transform: translateY(-2px);
+    }
+    .card h3 {
+      font-size: 0.95rem;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .footer-note {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      box-shadow: 0 4px 20px var(--accent-glow);
+      transition: all 0.2s ease;
+    }
+    .btn:hover {
+      opacity: 0.95;
+      transform: scale(1.02);
+    }
+  </style>
 </head>
 <body>
-  <main>
-    <p class="tag">MLOps Lab · Frontend</p>
-    <h1>Halo dari GitHub Pages!</h1>
-    <p>Halaman ini dikirim otomatis oleh GitHub Actions.</p>
-    <p>Perubahan kode → commit → push → deploy.</p>
-  </main>
-</body>
-</html>
-cat << 'EOF' > index.html
-<!doctype html>
-<html lang="id">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NovaVision Lab</title>
-  <style>body{font-family:system-ui;margin:0;background:#eef6ff;color:#153c5d}main{max-width:720px;margin:72px auto;padding:32px;background:white;border-radius:18px}.tag{color:#1478b8;font-weight:700}</style>
-</head>
-<body>
-  <main>
-    <p class="tag">MLOps Lab · Frontend</p>
-    <h1>Halo dari GitHub Pages!</h1>
-    <p>Halaman ini dikirim otomatis oleh GitHub Actions.</p>
-    <p>Perubahan kode → commit → push → deploy.</p>
-  </main>
+  <div class="container">
+    <div class="status-badge">
+      <span class="status-dot"></span>
+      GitHub Actions CI/CD Active
+    </div>
+    <h1>NovaVision MLOps Lab</h1>
+    <p class="subtitle">Platform deployment otomatis untuk eksperimen Machine Learning & Vision Language Models (VLM). Tampilan ini diperbarui secara otomatis melalui pipeline GitHub Pages.</p>
+    
+    <div class="grid">
+      <div class="card">
+        <h3>⚡ Automated CI/CD</h3>
+        <p>Setiap perubahan kode di branch main memicu build dan deploy otomatis.</p>
+      </div>
+      <div class="card">
+        <h3>🤖 ML Pipeline</h3>
+        <p>Klasifikasi teks tiket otomatis menggunakan model Scikit-Learn & TF-IDF.</p>
+      </div>
+      <div class="card">
+        <h3>👁️ VLM / OCR Engine</h3>
+        <p>Integrasi ekstraksi data dokumen/struk menggunakan server LM Studio lokal.</p>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      <span>Project MLOps oleh <strong>Naufal Saifullah</strong></span>
+      <a href="https://github.com/Naufalsninja/frontend-pages" target="_blank" class="btn">Lihat Source Code</a>
+    </div>
+  </div>
 </body>
 </html>
